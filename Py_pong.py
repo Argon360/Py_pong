@@ -187,18 +187,18 @@ pygame.display.set_caption('Pong')
 bg_color = pygame.Color('#FFF6F6')
 accent_color = (27, 35, 43)
 basic_font = pygame.font.Font('freesansbold.ttf', 32)
-plob_sound = pygame.mixer.Sound("/home/agent_a/Documents/practical/GP/prac 1/pong.ogg")
-score_sound = pygame.mixer.Sound("/home/agent_a/Documents/practical/GP/prac 1/score.ogg")
+plob_sound = pygame.mixer.Sound("pong.ogg")
+score_sound = pygame.mixer.Sound("score.ogg")
 middle_strip = pygame.Rect(screen_width / 2 - 2, 0, 4, screen_height)
 
 # Game objects
-player = Player('/home/agent_a/Documents/practical/GP/prac 1/Paddle.png', screen_width - 20, screen_height / 2, 5)
-opponent = Opponent('/home/agent_a/Documents/practical/GP/prac 1/Paddle.png', 20, screen_height / 2, 5, 0.5)
+player = Player('Paddle.png', screen_width - 20, screen_height / 2, 5)
+opponent = Opponent('Paddle.png', 20, screen_height / 2, 5, 0.5)
 paddle_group = pygame.sprite.Group()
 paddle_group.add(player)
 paddle_group.add(opponent)
 
-ball = Ball('/home/agent_a/Documents/practical/GP/prac 1/Ball.png', screen_width / 2, screen_height / 2, 4, 4, paddle_group)
+ball = Ball('Ball.png', screen_width / 2, screen_height / 2, 4, 4, paddle_group)
 ball_sprite = pygame.sprite.GroupSingle()
 ball_sprite.add(ball)
 
@@ -242,7 +242,7 @@ while True:
 
     if game_over:
         pygame.display.flip()
-        pygame.event.clear()  # Clear any existing events
+        pygame.event.clear()  
         while game_over:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN or event.type == pygame.QUIT:
