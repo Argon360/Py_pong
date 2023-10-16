@@ -2,6 +2,7 @@ import pygame
 import sys
 import time
 import random
+from pygame.locals import MOUSEBUTTONDOWN
 
 # Block class
 class Block(pygame.sprite.Sprite):
@@ -248,6 +249,21 @@ while True:
                 if event.type == pygame.KEYDOWN or event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+		if event.type == MOUSEBUTTONDOWN:  # Check for a mouse click
+            		if reset_game:  # If reset_game is True, restart the game
+                		player = Player('Paddle.png', screen_width - 20, screen_height / 2, 5)
+                		opponent = Opponent('Paddle.png', 20, screen_height / 2, 5, 0.5)
+                		paddle_group = pygame.sprite.Group()
+                		paddle_group.add(player)
+		                paddle_group.add(opponent)
+
+                		ball = Ball('Ball.png', screen_width / 2, screen_height / 2, 4, 4, paddle_group)
+                		ball_sprite = pygame.sprite.GroupSingle()
+                		ball_sprite.add(ball)
+
+                		game_manager = GameManager(ball_sprite, paddle_group)
+		                game_over = False
+                		reset_game = False	
 
     # Rendering
     pygame.display.flip()
