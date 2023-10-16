@@ -37,6 +37,7 @@ class Ball(Block):
         self.paddles = paddles
         self.active = False
         self.score_time = 0
+	self.speed_increment = speed_increment
 
     def update(self):
         if self.active:
@@ -47,24 +48,31 @@ class Ball(Block):
             self.restart_counter()
 
     def collisions(self):
-        if self.rect.top <= 0 or self.rect.bottom >= screen_height:
+        if self.active:
+            self.speed_x += self.speed_increment
+            self.speed_y += self.speed_increment
+		
+	if self.rect.top <= 0 or self.rect.bottom >= screen_height:
             pygame.mixer.Sound.play(plob_sound)
             self.speed_y *= -1
 
         for paddle in self.paddles:
             if self.rect.colliderect(paddle.rect):
                 pygame.mixer.Sound.play(plob_sound)
-                if abs(self.rect.right - paddle.rect.left) < 10 and self.speed_x > 0:
+		hit_pos = (self.rect.centery - paddle.rect.top) / paddle.rect.height
+        	if abs(self.rect.right - paddle.rect.left) < 10 and self.speed_x > 0:
                     self.speed_x *= -1
+                    self.speed_y = -1 + 2 * hit_pos  # Adjust the angle here
                 if abs(self.rect.left - paddle.rect.right) < 10 and self.speed_x < 0:
                     self.speed_x *= -1
+                    self.speed_y = -1 + 2 * hit_pos  # Adjust the angle here
                 if abs(self.rect.top - paddle.rect.bottom) < 10 and self.speed_y < 0:
                     self.rect.top = paddle.rect.bottom
                     self.speed_y *= -1
                 if abs(self.rect.bottom - paddle.rect.top) < 10 and self.speed_y > 0:
                     self.rect.bottom = paddle.rect.top
                     self.speed_y *= -1
-
+	
     def reset_ball(self):
         self.active = False
         self.speed_x *= random.choice((-1, 1))
@@ -199,7 +207,7 @@ paddle_group = pygame.sprite.Group()
 paddle_group.add(player)
 paddle_group.add(opponent)
 
-ball = Ball('Ball.png', screen_width / 2, screen_height / 2, 4, 4, paddle_group)
+ball = Ball('Ball.png', screen_width / 2, screen_height / 2, 4, 4, paddle_group, speed_increment=0.1)
 ball_sprite = pygame.sprite.GroupSingle()
 ball_sprite.add(ball)
 
